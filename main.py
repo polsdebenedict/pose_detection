@@ -32,11 +32,14 @@ if __name__ == '__main__':
     videos = os.listdir(args['input_video_folder'])
 
     if args["method"] == "detectron":
+
         if not os.path.isdir(args['output_pose_folder'] + "detectron/"):
             os.mkdir(args['output_pose_folder'] + "detectron/")
 
         for el in videos:
+
             file_name = el[:-4]
+            
             if not os.path.isdir(args['output_pose_folder'] + "detectron/" + file_name):
 
                 os.mkdir("./output/joint/detectron/" + file_name)
@@ -113,8 +116,14 @@ if __name__ == '__main__':
                     video_writer.write(visualization)
                     tot_out.append(outputs['instances'])
 
-                with open('./output/joint/detectron/' + file_name + '/' + file_name + '_DJ.pkl', 'wb') as handle:
-                    pickle.dump(tot_out, handle, protocol=pickle.HIGHEST_PROTOCOL)
+                output_fname = ""
+                if args['get']=='keypoints':
+                    output_fname = './output/joint/detectron/' + file_name + '/' + file_name + '_DJ.pkl'
+                elif args['get']=='mask':
+                    output_fname = './output/joint/detectron/' + file_name + '/' + file_name + '_DM.pkl'
+                
+                with open(output_fname, 'wb') as handle:
+                        pickle.dump(tot_out, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
                 # Release resources
                 video.release()
