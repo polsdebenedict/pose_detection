@@ -2,6 +2,7 @@ import argparse
 import cv2
 import os
 import pickle
+from shutil import copyfile
 
 from detectron2.utils.logger import setup_logger
 from detectron2.utils.video_visualizer import VideoVisualizer
@@ -25,6 +26,8 @@ if __name__ == '__main__':
                         help='specify folder to save joint output')
     parser.add_argument("--get", default='keypoints',
                         help='specify what you want to get with detectron: keypoints or mask')
+    parser.add_argument("--annot_input", default='-',
+                        help='specify specify if you want to add the annotation file to the results')
     
 
     args = vars(parser.parse_args())
@@ -130,6 +133,12 @@ if __name__ == '__main__':
                 video_writer.release()
                 cv2.destroyAllWindows()
 
+                if args['annot_input']!='-':
+                    if os.path.isfile(args['annot_input']+file_name+'_labels.csv') and os.path.isdir('./output/joint/detectron/'+file_name+'/'):
+                        copyfile(args['annot_input']+file_name+'_labels.csv', './output/joint/detectron/'+file_name+'/'+file_name+'_labels.csv')
+                    else:
+                        print('ERROR: missing input/output directory\n'+args['annot_input']+file_name+'_labels.csv'+'\n'+'./output/joint/detectron/'+file_name+'/')
+                
     if args["method"] == "vibe":
 
         if not os.path.isdir(args['output_pose_folder'] + args['method'] + '/'):
