@@ -23,6 +23,9 @@ if __name__ == '__main__':
                         help='specify folder containing video to process')
     parser.add_argument("--output_pose_folder", default='./output/joint/',
                         help='specify folder to save joint output')
+    parser.add_argument("--get", default='keypoints',
+                        help='specify what you want to get with detectron: keypoints or mask')
+    
 
     args = vars(parser.parse_args())
 
@@ -33,10 +36,10 @@ if __name__ == '__main__':
             os.mkdir(args['output_pose_folder'] + "detectron/")
 
         for el in videos:
+            file_name = el[:-4]
+            if not os.path.isdir(args['output_pose_folder'] + "detectron/" + file_name):
 
-            if not os.path.isdir(args['output_pose_folder'] + "detectron/" + el):
-
-                os.mkdir("./output/joint/detectron/" + el)
+                os.mkdir("./output/joint/detectron/" + file_name)
                 path = './output/video/' + el
                 video = cv2.VideoCapture(path)
 
@@ -45,14 +48,22 @@ if __name__ == '__main__':
                 frames_per_second = video.get(cv2.CAP_PROP_FPS)
                 num_frames = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 
-                video_writer = cv2.VideoWriter('./output/joint/detectron/' + el + '/' + el + '_D.mp4',
+                video_writer = cv2.VideoWriter('./output/joint/detectron/' + file_name + '/' + file_name + '_D.mp4',
                                                fourcc=cv2.VideoWriter_fourcc(*"mp4v"), fps=float(frames_per_second),
                                                frameSize=(width, height), isColor=True)
                 # Initialize predictor
                 cfg = get_cfg()  # get a fresh new config
-                cfg.merge_from_file(model_zoo.get_config_file("COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml"))
-                cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7  # set threshold for this model
-                cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml")
+
+                if args['get']=='keypoints':
+                    cfg.merge_from_file(model_zoo.get_config_file("COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml"))
+                    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7  # set threshold for this model
+                    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml")
+                
+                elif args['get']=='mask':
+                    cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
+                    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
+                    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
+                
                 predictor = DefaultPredictor(cfg)
                 # Initialize visualizer
                 v = VideoVisualizer(MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), ColorMode.IMAGE)
@@ -102,7 +113,7 @@ if __name__ == '__main__':
                     video_writer.write(visualization)
                     tot_out.append(outputs['instances'])
 
-                with open('./output/joint/detectron/' + el + '/' + el + '_DJ.pkl', 'wb') as handle:
+                with open('./output/joint/detectron/' + file_name + '/' + file_name + '_DJ.pkl', 'wb') as handle:
                     pickle.dump(tot_out, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
                 # Release resources
