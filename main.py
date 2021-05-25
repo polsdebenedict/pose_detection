@@ -28,7 +28,6 @@ if __name__ == '__main__':
                         help='specify what you want to get with detectron: keypoints or mask')
     parser.add_argument("--annot_input", default='-',
                         help='specify specify if you want to add the annotation file to the results')
-    
 
     args = vars(parser.parse_args())
 
@@ -42,7 +41,7 @@ if __name__ == '__main__':
         for el in videos:
 
             file_name = el[:-4]
-            
+
             if not os.path.isdir(args['output_pose_folder'] + "detectron/" + file_name):
 
                 os.mkdir("./output/joint/detectron/" + file_name)
@@ -60,16 +59,18 @@ if __name__ == '__main__':
                 # Initialize predictor
                 cfg = get_cfg()  # get a fresh new config
 
-                if args['get']=='keypoints':
+                if args['get'] == 'keypoints':
                     cfg.merge_from_file(model_zoo.get_config_file("COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml"))
                     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7  # set threshold for this model
                     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml")
-                
-                elif args['get']=='mask':
-                    cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
+
+                elif args['get'] == 'mask':
+                    cfg.merge_from_file(
+                        model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
                     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
-                    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
-                
+                    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
+                        "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
+
                 predictor = DefaultPredictor(cfg)
                 # Initialize visualizer
                 v = VideoVisualizer(MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), ColorMode.IMAGE)
@@ -120,29 +121,31 @@ if __name__ == '__main__':
                     tot_out.append(outputs['instances'])
 
                 output_fname = ""
-                if args['get']=='keypoints':
+                if args['get'] == 'keypoints':
                     output_fname = './output/joint/detectron/' + file_name + '/' + file_name + '_DJ.pkl'
-                elif args['get']=='mask':
+                elif args['get'] == 'mask':
                     output_fname = './output/joint/detectron/' + file_name + '/' + file_name + '_DM.pkl'
-                
+
                 with open(output_fname, 'wb') as handle:
-                        pickle.dump(tot_out, handle, protocol=pickle.HIGHEST_PROTOCOL)
+                    pickle.dump(tot_out, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
                 # Release resources
                 video.release()
                 video_writer.release()
                 cv2.destroyAllWindows()
 
-                if args['annot_input']!='-':
-                    if os.path.isfile(args['annot_input']+file_name+'_labels.csv') and os.path.isdir('./output/joint/detectron/'+file_name+'/'):
-                        copyfile(args['annot_input']+file_name+'_labels.csv', './output/joint/detectron/'+file_name+'/'+file_name+'_labels.csv')
+                if args['annot_input'] != '-':
+                    if os.path.isfile(args['annot_input'] + file_name + '_labels.csv') and os.path.isdir(
+                            './output/joint/detectron/' + file_name + '/'):
+                        copyfile(args['annot_input'] + file_name + '_labels.csv',
+                                 './output/joint/detectron/' + file_name + '/' + file_name + '_labels.csv')
                     else:
-                        print('ERROR: missing input/output directory\n'+args['annot_input']+file_name+'_labels.csv'+'\n'+'./output/joint/detectron/'+file_name+'/')
-                
+                        print('ERROR: missing input/output directory\n' + args[
+                            'annot_input'] + file_name + '_labels.csv' + '\n' + './output/joint/detectron/' + file_name + '/')
+
     if args["method"] == "vibe":
 
         if not os.path.isdir(args['output_pose_folder'] + args['method'] + '/'):
             os.mkdir(args['output_pose_folder'] + args['method'] + '/')
 
         subprocess.call(['sh', './main_vibe.sh'])
-
