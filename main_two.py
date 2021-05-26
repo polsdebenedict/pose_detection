@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
             file_name = el[:-4]
 
-            if not os.path.isdir(args['output_pose_folder'] +args['method'] + '/' + file_name):
+            if not os.path.isdir(args['output_pose_folder'] +args['method'] + '/' + file_name) and el!='detectron':
 
                 os.mkdir(args['output_pose_folder'] +args['method'] + '/' + file_name)
                 path = args['input_video_folder'] + el
@@ -61,10 +61,10 @@ if __name__ == '__main__':
 
                 if args['get'] == 'keypoints':
                     # cfg.merge_from_file(model_zoo.get_config_file("COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml"))
-                    cfg.merge_from_file(model_zoo.get_config_file("COCO-Keypoints/keypoint_rcnn_R_101_FPN_3x.yaml"))
+                    cfg.merge_from_file(model_zoo.get_config_file("COCO-Keypoints/keypoint_rcnn_X_101_32x8d_FPN_3x.yaml"))
 
-                    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
-                    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Keypoints/keypoint_rcnn_R_101_FPN_3x.yaml")
+                    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7  # set threshold for this model
+                    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Keypoints/keypoint_rcnn_X_101_32x8d_FPN_3x.yaml")
 
                 elif args['get'] == 'mask':
                     cfg.merge_from_file(
