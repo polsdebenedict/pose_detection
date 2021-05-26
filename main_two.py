@@ -38,7 +38,7 @@ if __name__ == '__main__':
         if not os.path.isdir(args['output_pose_folder'] +args['method'] + '/'):
             os.mkdir(args['output_pose_folder'] + args['method'] + '/')
 
-        for el in videos:
+        for el in tqdm(videos):
 
             file_name = el[:-4]
 
@@ -114,7 +114,7 @@ if __name__ == '__main__':
                 num_frames = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 
                 # Enumerate the frames of the video
-                for visualization, outputs in tqdm(runOnVideo(video, num_frames), total=num_frames):
+                for visualization, outputs in runOnVideo(video, num_frames):
                     # Write test image
                     # cv2.imwrite('POSE detectron2.png', visualization)
 
