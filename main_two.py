@@ -53,7 +53,7 @@ if __name__ == '__main__':
                 frames_per_second = video.get(cv2.CAP_PROP_FPS)
                 num_frames = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 
-                video_writer = cv2.VideoWriter(args['output_pose_folder'] +args['method'] + '/' + + file_name + '/' + file_name + '_D.mp4',
+                video_writer = cv2.VideoWriter(args['output_pose_folder'] +args['method'] + '/' + file_name + '/' + file_name + '_D.mp4',
                                                fourcc=cv2.VideoWriter_fourcc(*"mp4v"), fps=float(frames_per_second),
                                                frameSize=(width, height), isColor=True)
                 # Initialize predictor
