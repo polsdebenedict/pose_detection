@@ -20,9 +20,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Choose pose extraction method')
 
     parser.add_argument("--method", default='detectron', help='choose detectron, vibe')
-    parser.add_argument("--input_video_folder", default='./output/video_sample/',
+    parser.add_argument("--input_video_folder", default='./output/video_sample/mask/',
                         help='specify folder containing video to process')
-    parser.add_argument("--output_pose_folder", default='./output/video_sample/',
+    parser.add_argument("--output_pose_folder", default='./output/video_sample/mask/',
                         help='specify folder to save joint output')
     parser.add_argument("--get", default='keypoints',
                         help='specify what you want to get with detectron: keypoints or mask')
@@ -151,3 +151,12 @@ if __name__ == '__main__':
             os.mkdir(args['output_pose_folder'] + args['method'] + '/')
 
         subprocess.call(['sh', './main_vibe.sh'])
+
+
+'''
+detr bouding box
+coco keypoints 
+algarian loss
+
+usare masked video per keypoints extraction
+'''
