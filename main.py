@@ -53,9 +53,7 @@ if __name__ == '__main__':
                 frames_per_second = video.get(cv2.CAP_PROP_FPS)
                 num_frames = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 
-                video_writer = cv2.VideoWriter('./output/joint/detectron/' + file_name + '/' + file_name + '_D.mp4',
-                                               fourcc=cv2.VideoWriter_fourcc(*"mp4v"), fps=float(frames_per_second),
-                                               frameSize=(width, height), isColor=True)
+                
                 # Initialize predictor
                 cfg = get_cfg()  # get a fresh new config
 
@@ -76,7 +74,6 @@ if __name__ == '__main__':
                 v = VideoVisualizer(MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), ColorMode.IMAGE)
 
                 tot_out = []
-
 
                 def runOnVideo(video, maxFrames):
                     """ Runs the predictor on every frame in the video (unless maxFrames is given),
@@ -123,8 +120,14 @@ if __name__ == '__main__':
                 output_fname = ""
                 if args['get'] == 'keypoints':
                     output_fname = './output/joint/detectron/' + file_name + '/' + file_name + '_DJ.pkl'
+                    video_writer = cv2.VideoWriter('./output/joint/detectron/' + file_name + '/' + file_name + '_DJ.mp4',
+                                               fourcc=cv2.VideoWriter_fourcc(*"mp4v"), fps=float(frames_per_second),
+                                               frameSize=(width, height), isColor=True)
                 elif args['get'] == 'mask':
                     output_fname = './output/joint/detectron/' + file_name + '/' + file_name + '_DM.pkl'
+                    video_writer = cv2.VideoWriter('./output/joint/detectron/' + file_name + '/' + file_name + '_DM.mp4',
+                                               fourcc=cv2.VideoWriter_fourcc(*"mp4v"), fps=float(frames_per_second),
+                                               frameSize=(width, height), isColor=True)
 
                 with open(output_fname, 'wb') as handle:
                     pickle.dump(tot_out, handle, protocol=pickle.HIGHEST_PROTOCOL)
