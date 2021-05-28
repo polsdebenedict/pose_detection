@@ -10,7 +10,9 @@
 > rk = ReadKeypoints(path_to_pkl_file) \
 > dict_frame_info = rk.get_features(['arg_1', 'arg_2', ...])
 
+##### video_sample and keypoints extraction
 ![](./output/video_sample/fi104_xvid.gif)
 ![](./output/R_101x3_threshold_70/fi104_xvid_D.gif)
+##### masking+keypoitn and panoptic+keypoints
 ![](./output/mask+keypoints/fi104_xvid_D_D.gif)
 ![](./output/panoptic+keypoints/fi104_xvid_D_DK.gif)
