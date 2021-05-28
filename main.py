@@ -42,10 +42,10 @@ if __name__ == '__main__':
 
             file_name = el[:-4]
 
-            if not os.path.isdir(args['output_pose_folder'] + "detectron/" + file_name):
+            if not os.path.isdir(args['output_pose_folder'] + args['method'] + '/' + file_name):
 
-                os.mkdir("./output/joint/detectron/" + file_name)
-                path = './output/video/' + el
+                os.mkdir(args['output_pose_folder'] + args['method'] + '/' + file_name)
+                path = args['input_video_folder'] + el
                 video = cv2.VideoCapture(path)
 
                 width = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -53,7 +53,10 @@ if __name__ == '__main__':
                 frames_per_second = video.get(cv2.CAP_PROP_FPS)
                 num_frames = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 
-                
+                video_writer = cv2.VideoWriter(args['output_pose_folder'] + args['method'] + '/' + file_name + '/' + file_name + '_D'+args['get'][0].upper()+'.mp4',
+                                               fourcc=cv2.VideoWriter_fourcc(*"mp4v"), fps=float(frames_per_second),
+                                               frameSize=(width, height), isColor=True)
+
                 # Initialize predictor
                 cfg = get_cfg()  # get a fresh new config
 
@@ -119,15 +122,11 @@ if __name__ == '__main__':
 
                 output_fname = ""
                 if args['get'] == 'keypoints':
-                    output_fname = './output/joint/detectron/' + file_name + '/' + file_name + '_DJ.pkl'
-                    video_writer = cv2.VideoWriter('./output/joint/detectron/' + file_name + '/' + file_name + '_DJ.mp4',
-                                               fourcc=cv2.VideoWriter_fourcc(*"mp4v"), fps=float(frames_per_second),
-                                               frameSize=(width, height), isColor=True)
+                    output_fname = args['output_pose_folder'] + args['method'] + '/' + file_name + '/' + file_name + '_DJ.pkl'
+                    
                 elif args['get'] == 'mask':
-                    output_fname = './output/joint/detectron/' + file_name + '/' + file_name + '_DM.pkl'
-                    video_writer = cv2.VideoWriter('./output/joint/detectron/' + file_name + '/' + file_name + '_DM.mp4',
-                                               fourcc=cv2.VideoWriter_fourcc(*"mp4v"), fps=float(frames_per_second),
-                                               frameSize=(width, height), isColor=True)
+                    output_fname = args['output_pose_folder'] + args['method'] + '/' + file_name + '/' + file_name + '_DM.pkl'
+                    
 
                 with open(output_fname, 'wb') as handle:
                     pickle.dump(tot_out, handle, protocol=pickle.HIGHEST_PROTOCOL)
@@ -139,12 +138,12 @@ if __name__ == '__main__':
 
                 if args['annot_input'] != '-':
                     if os.path.isfile(args['annot_input'] + file_name + '_labels.csv') and os.path.isdir(
-                            './output/joint/detectron/' + file_name + '/'):
+                            args['output_pose_folder'] + args['method'] + '/' + file_name + '/'):
                         copyfile(args['annot_input'] + file_name + '_labels.csv',
-                                 './output/joint/detectron/' + file_name + '/' + file_name + '_labels.csv')
+                                 args['output_pose_folder'] + args['method'] + '/' + file_name + '/' + file_name + '_labels.csv')
                     else:
                         print('ERROR: missing input/output directory\n' + args[
-                            'annot_input'] + file_name + '_labels.csv' + '\n' + './output/joint/detectron/' + file_name + '/')
+                            'annot_input'] + file_name + '_labels.csv' + '\n' + args['output_pose_folder'] + args['method'] + '/' + file_name + '/')
 
     if args["method"] == "vibe":
 
