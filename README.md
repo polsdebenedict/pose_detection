@@ -10,7 +10,12 @@
 > rk = ReadKeypoints(path_to_pkl_file) \
 > dict_frame_info = rk.get_features(['arg_1', 'arg_2', ...])
 
-![](./output/video_sample/fi104_xvid_D.mp4)
-![](./output/R_101x3_threshold_70/fi104_xvid_D.mp4)
-![](./output/mask+keypoints/fi104_xvid_D.mp4)
-![](./output/panoptic+keypoints/fi104_xvid_D.mp4)
+<video width="280" height="200" controls>
+  <source src="./output/R_101x3_threshold_70/fi104_xvid_D.mp4" type="video/mp4">
+</video>
+<video width="280" height="200" controls>
+  <source src="./output/mask+keypoints/fi104_xvid_D.mp4" type="video/mp4">
+</video>
+<video width="280" height="200" controls>
+  <source src="./output/panoptic+keypoints/fi104_xvid_D.mp4" type="video/mp4">
+</video>
