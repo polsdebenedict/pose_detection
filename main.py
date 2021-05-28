@@ -35,8 +35,8 @@ if __name__ == '__main__':
 
     if args["method"] == "detectron":
 
-        if not os.path.isdir(args['output_pose_folder'] + "detectron/"):
-            os.mkdir(args['output_pose_folder'] + "detectron/")
+        if not os.path.isdir(args['output_pose_folder'] + args["method"]):
+            os.mkdir(args['output_pose_folder'] + args["method"])
 
         for el in videos:
 
