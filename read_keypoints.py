@@ -38,6 +38,7 @@ class ReadKeypoints:
                 aux[name] = el.get(name)
             aux['tag'] = int(self.annot[i][2])
             keys[i] = aux
+
             i += 1
 
         return keys
@@ -62,6 +63,8 @@ if __name__ == '__main__':
         if el not in 'total_info':
             output_fname = "./output/joint/detectron/total_info/" + el + "_DJA.pkl"
 
+            print(output_fname[0])
+            exit()
             if not os.path.isfile(output_fname):
                 read_keypoint = ReadKeypoints(el)
                 total_info = read_keypoint.get_features(['scores', 'pred_keypoints'])
