@@ -22,7 +22,7 @@ if __name__ == '__main__':
     parser.add_argument("--method", default='detectron', help='choose detectron, vibe')
     parser.add_argument("--input_video_folder", default='./output/video_sample/mask/',
                         help='specify folder containing video to process')
-    parser.add_argument("--output_pose_folder", default='./output/video_sample/mask',
+    parser.add_argument("--output_pose_folder", default='./output/video_sample/mask/',
                         help='specify folder to save joint output')
     parser.add_argument("--get", default='keypoints',
                         help='specify what you want to get with detectron: keypoints or mask')
@@ -38,7 +38,7 @@ if __name__ == '__main__':
         if not os.path.isdir(args['output_pose_folder'] + args["method"]):
             os.mkdir(args['output_pose_folder'] + args["method"])
 
-        for el in videos:
+        for el in tqdm(videos):
 
             file_name = el[:-4]
 
@@ -112,7 +112,7 @@ if __name__ == '__main__':
                 num_frames = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 
                 # Enumerate the frames of the video
-                for visualization, outputs in tqdm(runOnVideo(video, num_frames), total=num_frames):
+                for visualization, outputs in runOnVideo(video, num_frames):
                     # Write test image
                     # cv2.imwrite('POSE detectron2.png', visualization)
 
