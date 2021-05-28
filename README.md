@@ -14,8 +14,8 @@
   <source src="./output/R_101x3_threshold_70/fi104_xvid_D.mp4" type="video/mp4">
 </video>
 <video width="280" height="200" controls>
-  <source src="./output/mask+keypoints/fi104_xvid_D.mp4" type="video/mp4">
+  <source src="./output/mask+keypoints/fi104_xvid_D_D.mp4" type="video/mp4">
 </video>
 <video width="280" height="200" controls>
-  <source src="./output/panoptic+keypoints/fi104_xvid_D.mp4" type="video/mp4">
+  <source src="./output/panoptic+keypoints/fi104_xvid_D_D.mp4" type="video/mp4">
 </video>
